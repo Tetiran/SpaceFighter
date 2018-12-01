@@ -1,8 +1,8 @@
 import java.awt.*;
 
 public abstract class Entity {
-    private int posx;
-    private int posy;
+    private double posx;
+    private double posy;
     private int width;
     private int height;
 
@@ -12,12 +12,12 @@ public abstract class Entity {
 
     }
     //setters
-    public void setPosx(int posx) {
+    public void setPosx(double posx) {
         this.posx = posx;
 
     }
 
-    public void setPosy(int posy) {
+    public void setPosy(double posy) {
         this.posy = posy;
 
     }
@@ -30,11 +30,11 @@ public abstract class Entity {
 
     }
     // getters
-    public int getPosx() {
+    public double getPosx() {
         return this.posx;
     }
 
-    public int getPosy() {
+    public double getPosy() {
         return this.posy;
     }
 

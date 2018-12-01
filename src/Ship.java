@@ -7,7 +7,7 @@ public class Ship extends Entity {
     private boolean markedForDelete;
     private int animationState;
     private int speed;
-    private int angle;
+    private double angle;
 
     public Ship(int posx, int posy, int width, int height, int health, int armor, int shield, int speed) {
         super(posx, posy, width, height);
@@ -30,7 +30,7 @@ public class Ship extends Entity {
     public void setShield(int shield){
         this.shield=shield;
     }
-    public void setAngle(int angle){
+    public void setAngle(double angle){
         this.angle=angle;
     }
 
@@ -47,7 +47,7 @@ public class Ship extends Entity {
         return this.shield;
     }
 
-    public int getAngle() {
+    public double getAngle() {
         return this.angle;
     }
 

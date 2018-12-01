@@ -11,13 +11,13 @@ import java.util.TreeSet;
 // main game state
 public class GameField extends  JPanel{
     private int score;
-    public static final String IMG_FILE = "files/background.jpg";
-    public static final int INTERVAL = 15;
+    private static final String IMG_FILE = "files/background.jpg";
+    private static final int INTERVAL = 15;
     private final Set<Character> pressed = new TreeSet<>();
 
 
     private static BufferedImage img;
-    PlayerShip player;
+    private PlayerShip player;
 
     public GameField() {
         Timer timer = new Timer(INTERVAL, new ActionListener() {
@@ -59,7 +59,7 @@ public class GameField extends  JPanel{
         this.setPreferredSize( new Dimension( 1920, 1080 ) );
     }
 
-    public void tick(){
+    private void tick(){
         if (pressed.contains('w')) {
             player.moveShip(1);
         }
@@ -72,6 +72,8 @@ public class GameField extends  JPanel{
         if (pressed.contains('a')) {
             player.moveShip(4);
         }
+
+        player.updateCursor(MouseInfo.getPointerInfo().getLocation());
         repaint();
     }
 
