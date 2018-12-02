@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+import static java.awt.event.KeyEvent.VK_SPACE;
 
 public class GameMain implements Runnable{
     public void run() {
@@ -13,6 +16,9 @@ public class GameMain implements Runnable{
         // Main playing area
         final GameField field = new GameField();
         frame.add(field, BorderLayout.CENTER);
+
+        final StatusBar status = new StatusBar();
+        //frame.add(status, BorderLayout.NORTH);
 
         frame.setResizable( false );
         frame.pack();

@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -13,7 +15,8 @@ public class GameField extends  JPanel{
     private int score;
     private static final String IMG_FILE = "files/background.jpg";
     private static final int INTERVAL = 15;
-    private final Set<Character> pressed = new TreeSet<>();
+    private Set<Character> pressed = new TreeSet<>();
+    private LinkedList<Entity> entities = new LinkedList<>();
 
 
     private static BufferedImage img;
@@ -29,7 +32,6 @@ public class GameField extends  JPanel{
 
 
         player = new PlayerShip(500, 500,32,32,100,100,100, 5);
-
         setFocusable(true);
 
 
@@ -72,8 +74,24 @@ public class GameField extends  JPanel{
         if (pressed.contains('a')) {
             player.moveShip(4);
         }
+        if (pressed.contains(' ')) {
+            LinkedList<Entity> ent =player.mainAttack();
+            if (ent != null){
+                entities.addAll(ent);
+            }
 
-        player.updateCursor(MouseInfo.getPointerInfo().getLocation());
+        }
+
+        Iterator<Entity> iter = entities.iterator();
+        while (iter.hasNext()) {
+            Entity ent =iter.next();
+            ent.update();
+            if(ent.getRemoveMark()){
+                iter.remove();
+            }
+        }
+        player.update();
+        player.updateCursor(this.getMousePosition());
         repaint();
     }
 
@@ -82,6 +100,9 @@ public class GameField extends  JPanel{
         super.paintComponent(g);
         g.drawImage(img, 0, 0, this);
         player.draw(g);
+        for (Entity entity : entities) {
+            entity.draw(g);
+        }
 
     }
 }

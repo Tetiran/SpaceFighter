@@ -5,8 +5,9 @@ public abstract class Entity {
     private double posy;
     private int width;
     private int height;
+    private boolean markedForRemove;
 
-    public Entity(int posx, int posy, int width, int height) {
+    public Entity(double posx, double posy, int width, int height) {
         this.posx = posx;
         this.posy = posy;
 
@@ -27,8 +28,13 @@ public abstract class Entity {
     }
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public void setMarkedForRemove(boolean x) {
+        this.markedForRemove = x;
 
     }
+
     // getters
     public double getPosx() {
         return this.posx;
@@ -45,6 +51,12 @@ public abstract class Entity {
     public int getHeight() {
         return this.height;
     }
+
+    public boolean getRemoveMark() {
+        return this.markedForRemove;
+    }
+
+    public abstract void update();
 
     public abstract void draw(Graphics g);
 }
