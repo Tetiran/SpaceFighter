@@ -1,8 +1,4 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 
 public class PlayerShip extends Ship {
@@ -10,28 +6,41 @@ public class PlayerShip extends Ship {
     private final int WEAPON1COOLDOWN=20;
     private final int WPNX =60;
     private final int WPNY =30;
+    private  int animCountdown=10;
+    private int animPosition=0;
 
 
 
-    private static BufferedImage img;
+    private static Sprite spriteSheeet=new Sprite(IMG_FILE);
 
     public PlayerShip(int posx, int posy, int width, int height,
                       int health, int armor, int shield, int speed) {
         super(posx, posy, width,height, health, armor, shield,speed);
 
-        try {
-            if (img == null) {
-                img = ImageIO.read(new File(IMG_FILE));
-
-            }
-        } catch (IOException e) {
-            System.out.println("Internal Error:" + e.getMessage());
-        }
-        this.setWidth(img.getWidth());
-        this.setHeight(img.getHeight());
-        this.setImg(img);
+        this.setWidth(spriteSheeet.getGrid());
+        this.setHeight(spriteSheeet.getGrid());
+        this.setImg(spriteSheeet.getSprite(1));
     }
 
+    @Override
+    public void update() {
+        super.update();
+        StatusBar.setHealthmeter(this.getHealth());
+        StatusBar.setShieldMeter(this.getShield());
+        animCountdown--;
+        if(animCountdown<=0) {
+            animPosition++;
+            if(animPosition<spriteSheeet.getSpriteNumber()-1) {
+                this.setImg(spriteSheeet.getSprite(animPosition));
+                System.out.println(animPosition);
+            }
+            else {
+                animPosition=0;
+                this.setImg(spriteSheeet.getSprite(animPosition));
+            }
+            animCountdown=10;
+        }
+    }
     public void updateCursor(Point p){
         if(p != null) {
             this.setAngle(Math.atan2(p.y - this.getPosy(), p.x - this.getPosx()));

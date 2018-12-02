@@ -21,6 +21,7 @@ public class GameField extends  JPanel{
 
     private static BufferedImage img;
     private PlayerShip player;
+    private StatusBar status;
 
     public GameField() {
         Timer timer = new Timer(INTERVAL, new ActionListener() {
@@ -60,6 +61,9 @@ public class GameField extends  JPanel{
 
         this.setPreferredSize( new Dimension( 1920, 1080 ) );
     }
+    public void updateBar(StatusBar status){
+        this.status=status;
+    }
 
     private void tick(){
         if (pressed.contains('w')) {
@@ -79,7 +83,6 @@ public class GameField extends  JPanel{
             if (ent != null){
                 entities.addAll(ent);
             }
-
         }
 
         Iterator<Entity> iter = entities.iterator();
@@ -90,9 +93,11 @@ public class GameField extends  JPanel{
                 iter.remove();
             }
         }
+        player.damageShip(1);
         player.update();
         player.updateCursor(this.getMousePosition());
         repaint();
+        status.repaint();
     }
 
     @Override

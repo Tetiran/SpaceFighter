@@ -18,7 +18,10 @@ public class GameMain implements Runnable{
         frame.add(field, BorderLayout.CENTER);
 
         final StatusBar status = new StatusBar();
-        //frame.add(status, BorderLayout.NORTH);
+        frame.add(status, BorderLayout.NORTH);
+        field.updateBar(status);
+
+
 
         frame.setResizable( false );
         frame.pack();

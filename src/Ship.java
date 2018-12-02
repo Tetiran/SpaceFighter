@@ -73,10 +73,11 @@ public class Ship extends Entity {
 
     public boolean damageShip(int damage){
         if(shield>0){
-            shield= Math.max(0, shield-damage);
+            this.shield= Math.max(0, shield-damage);
             return false;
         }
-        health=Math.min(0, health/armor);
+        this.health = (int) Math.max(0, (health-Math.ceil((double)damage/armor)));
+
         return health <= 0;
     }
     void moveShip(int direction) {
@@ -119,6 +120,6 @@ public class Ship extends Entity {
         at.rotate(this.getAngle(), this.getWidth()/2.0, this.getHeight()/2.0);
         g2d.drawImage(this.img, at, null);
 
-        g.drawOval((int) this.getPosx()-RADIUS/2, (int) this.getPosy()-RADIUS/2,RADIUS,RADIUS);
+        //g.drawOval((int) this.getPosx()-RADIUS/2, (int) this.getPosy()-RADIUS/2,RADIUS,RADIUS);
     }
 }
