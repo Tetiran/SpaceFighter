@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 
 public abstract class Entity {
     private double posx;
@@ -6,6 +8,9 @@ public abstract class Entity {
     private int width;
     private int height;
     private boolean markedForRemove;
+    private Shape bounds;
+    private int damage;
+
 
     public Entity(double posx, double posy, int width, int height) {
         this.posx = posx;
@@ -34,6 +39,28 @@ public abstract class Entity {
         this.markedForRemove = x;
 
     }
+    public void setBounds(Shape bounds) {
+        this.bounds = bounds;
+
+    }
+    public void setDamage(int damage){
+        this.damage=damage;
+    }
+
+    public boolean checkCollision(Entity check){
+        if(check.getBounds() != null&& this.getBounds() != null) {
+            Area checkArea = new Area(check.getBounds());
+            checkArea.intersect(new Area(this.getBounds()));
+            //System.out.println(bounds.getBounds().height);
+
+            return !checkArea.isEmpty();
+        }
+        return false;
+
+    }
+
+    public void damage(int damage){
+    }
 
     // getters
     public double getPosx() {
@@ -56,7 +83,15 @@ public abstract class Entity {
         return this.markedForRemove;
     }
 
+    public Shape getBounds() {
+
+        return this.bounds;
+    }
+    public int getDamage(){
+        return this.damage;
+    }
+
     public abstract void update();
 
-    public abstract void draw(Graphics g);
+    public abstract void  draw(Graphics g);
 }

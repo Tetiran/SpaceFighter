@@ -17,11 +17,18 @@ public class GameField extends  JPanel{
     private static final int INTERVAL = 15;
     private Set<Character> pressed = new TreeSet<>();
     private LinkedList<Entity> entities = new LinkedList<>();
+    private static LinkedList<Entity> entitiestoadd = new LinkedList<>();
 
 
     private static BufferedImage img;
     private PlayerShip player;
     private StatusBar status;
+    private EnemyShip enemy;
+
+    public static void addEntity(Entity entity){
+        entitiestoadd.add(entity);
+
+    }
 
     public GameField() {
         Timer timer = new Timer(INTERVAL, new ActionListener() {
@@ -33,6 +40,9 @@ public class GameField extends  JPanel{
 
 
         player = new PlayerShip(500, 500,32,32,100,100,100, 5);
+        enemy = new EnemyShip(300, 300,32,32,100,100,100, 5);
+        entities.add(enemy);
+        entities.add(player);
         setFocusable(true);
 
 
@@ -66,6 +76,9 @@ public class GameField extends  JPanel{
     }
 
     private void tick(){
+        if(KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner()==null){
+            pressed.clear();
+        }
         if (pressed.contains('w')) {
             player.moveShip(1);
         }
@@ -79,22 +92,25 @@ public class GameField extends  JPanel{
             player.moveShip(4);
         }
         if (pressed.contains(' ')) {
-            LinkedList<Entity> ent =player.mainAttack();
-            if (ent != null){
-                entities.addAll(ent);
-            }
+            player.mainAttack();
         }
-
+        entities.addAll(entitiestoadd);
         Iterator<Entity> iter = entities.iterator();
         while (iter.hasNext()) {
             Entity ent =iter.next();
             ent.update();
+            for (Entity entity : entities) {
+                if(ent != entity) {
+                    if (ent.checkCollision(entity)) {
+                        ent.damage(entity.getDamage());
+                        entity.damage(ent.getDamage());
+                    }
+                }
+            }
             if(ent.getRemoveMark()){
                 iter.remove();
             }
         }
-        player.damageShip(1);
-        player.update();
         player.updateCursor(this.getMousePosition());
         repaint();
         status.repaint();
@@ -107,7 +123,8 @@ public class GameField extends  JPanel{
         player.draw(g);
         for (Entity entity : entities) {
             entity.draw(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+            //g2d.draw(entity.getBounds());
         }
-
     }
 }

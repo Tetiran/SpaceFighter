@@ -1,12 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
-import static java.awt.event.KeyEvent.VK_SPACE;
-
-public class GameMain implements Runnable{
+public class Game implements Runnable{
     public void run() {
 
         final JFrame frame = new JFrame("Cis120 In Space");
@@ -21,8 +16,6 @@ public class GameMain implements Runnable{
         frame.add(status, BorderLayout.NORTH);
         field.updateBar(status);
 
-
-
         frame.setResizable( false );
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +28,7 @@ public class GameMain implements Runnable{
      * runs it. IMPORTANT: Do NOT delete! You MUST include this in your final submission.
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new GameMain());
+        SwingUtilities.invokeLater(new Game());
     }
 }
 
