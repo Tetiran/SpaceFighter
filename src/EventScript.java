@@ -9,10 +9,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 public class EventScript {
-    public void readScript() {
+
+    public static void readScript() {
 
         try {
-            File inputFile = new File("input.txt");
+            File inputFile = new File("files/script.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);

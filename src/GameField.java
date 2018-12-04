@@ -29,6 +29,20 @@ public class GameField extends  JPanel{
     private EnemyShip enemy;
     private double asteroidSpawn=0;
     private double LARGEPROABAILITY= .3;
+    private static boolean bossPresent;
+    private static double bossHealth;
+    private static double BossMax;
+    private static String Bossname;
+
+
+    public static void setBoss(boolean boss,String name, int health, int healthmax){
+        bossPresent=boss;
+        bossHealth=health;
+        BossMax=healthmax;
+        Bossname=name;
+
+
+    }
 
     public static void addEntity(Entity entity){
         if(entity != null) {
@@ -37,6 +51,7 @@ public class GameField extends  JPanel{
 
     }
     public void startGame(){
+        setBoss(true,"Space Kracken",500,500);
         Timer timer = new Timer(INTERVAL, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 tick();
@@ -186,6 +201,21 @@ public class GameField extends  JPanel{
             Graphics2D g2d = (Graphics2D) g.create();
             //g2d.draw(entity.getBounds());
         }
+        if(bossPresent){
+            //draw bossbar
+            Graphics2D g2d = (Graphics2D) g.create();
+            Color barcolor = new Color(31, 49, 204);
+            Font f=new Font("LucidaTypewriterBold", Font.PLAIN, 30);
+            g2d.setFont(f);
+            FontMetrics metrics = g2d.getFontMetrics();
+            g2d.drawString(Bossname,(1920/2)-metrics.stringWidth(Bossname)/2,30);
+            g.setColor(Color.BLACK);
+            g.drawRect((1920/2)-250, 39, 501, 11);
+            g.setColor(barcolor);
+            g.fillRect((1920/2)-250+1, 40, (int)( 500*bossHealth/BossMax), 10);
+
+        }
+
 
     }
 }

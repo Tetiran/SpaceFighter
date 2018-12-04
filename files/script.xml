@@ -1,0 +1,26 @@
+<?xml version = "1.0"?>
+<Script>
+    <Level>
+        <timestamp stamp="393">
+            <Entity>EnemyShip</Entity>
+            <health>100</health>
+            <armor>kad</armor>
+            <shield>dinkar</shield>
+            <speed>85</speed>
+        </timestamp>
+
+        <timestamp stamp="493">
+            <firstname>Vaneet</firstname>
+            <lastname>Gupta</lastname>
+            <nickname>vinni</nickname>
+            <marks>95</marks>
+        </timestamp>
+
+        <timestamp stamp="593">
+            <firstname>jasvir</firstname>
+            <lastname>singn</lastname>
+            <nickname>jazz</nickname>
+            <marks>90</marks>
+        </timestamp>
+    </Level>
+</Script>
