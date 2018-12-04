@@ -47,8 +47,7 @@ public class Asteroid extends Entity {
 
         if(playDeath) {
             if(chuckSummon){
-                //System.out.println("summoning");
-                int numChuncks=(int)(Math.random()*4+2);
+                int numChuncks=(int)(Math.random()*4+4);
                 for (int i=0; i<numChuncks; i++){
                     deathSummon();
 
@@ -76,7 +75,6 @@ public class Asteroid extends Entity {
         double angle=Math.random()*2*Math.PI;
         double rollangle=Math.random()*.2;
         double speed=Math.random()*6+5;
-        System.out.println("summoned");
         AsteroidChunck asteroid= new AsteroidChunck(posx,posy,32,32,angle,speed,rollangle);
         GameField.addEntity(asteroid);
     }

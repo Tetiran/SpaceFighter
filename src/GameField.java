@@ -1,7 +1,10 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +27,6 @@ public class GameField extends  JPanel{
     private static PlayerShip player;
     private StatusBar status;
     private EnemyShip enemy;
-    private Asteroid chunck;
     private double asteroidSpawn=0;
     private double LARGEPROABAILITY= .3;
 
@@ -34,8 +36,7 @@ public class GameField extends  JPanel{
         }
 
     }
-
-    public GameField() {
+    public void startGame(){
         Timer timer = new Timer(INTERVAL, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 tick();
@@ -43,20 +44,9 @@ public class GameField extends  JPanel{
         });
         timer.start();
 
-
-        player = new PlayerShip(500, 500,32,32,100,1,100, 5);
-        enemy = new EnemyShip(300, 300,32,32,100,1,100, 5);
-        chunck = new AsteroidChunck(700,700,32,32,0,2,.01);
-
-        entities.add(enemy);
-        entities.add(player);
-        entities.add(chunck);
-
-        setFocusable(true);
-
-
         addKeyListener( new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
+
                 pressed.add(e.getKeyChar());
             }
             @Override
@@ -65,6 +55,23 @@ public class GameField extends  JPanel{
             }
 
         });
+
+    }
+
+    public GameField() {
+
+
+
+        player = new PlayerShip(500, 500,32,32,100,1,100, 5);
+        enemy = new EnemyShip(300, 300,32,32,100,1,100, 5);
+
+        entities.add(enemy);
+        entities.add(player);
+
+        this.setFocusable(true);
+
+
+
 
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -126,12 +133,9 @@ public class GameField extends  JPanel{
             }
             if(ent.getRemoveMark()){
                 iter.remove();
-            }
-            //delete if out of bounds
-            if(ent.getPosx()>2000||ent.getPosx()<-1000){
+            } else if(ent.getPosx()>2000||ent.getPosx()<-1000){
                 iter.remove();
-            }
-            if(ent.getPosy()>2000||ent.getPosy()<-1000){
+            } else if(ent.getPosy()>2000||ent.getPosy()<-1000){
                 iter.remove();
             }
         }
@@ -161,11 +165,6 @@ public class GameField extends  JPanel{
 
             asteroidSpawn=100+Math.random()*200;
         }
-
-
-
-
-
 
         player.updateCursor(this.getMousePosition());
         repaint();

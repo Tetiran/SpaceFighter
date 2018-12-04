@@ -80,7 +80,7 @@ public class AsteroidChunck extends Asteroid {
         AffineTransform transform = new AffineTransform();
         transform.translate(this.getPosx(), this.getPosy());
         transform.rotate(angle);
-
         this.setBounds(ellipse);
+
     }
 }

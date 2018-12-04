@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class StatusBar<setShieldMeter> extends JPanel {
-    private  static final int BAR_WIDTH=1920;
-    public   static final int BAR_HEIGHT=30;
+    private static final int BAR_WIDTH = 1920;
+    public static final int BAR_HEIGHT = 30;
     private JLabel healthLabel;
     private JLabel shieldLable;
     private static int healthmeter;
@@ -19,9 +19,7 @@ public class StatusBar<setShieldMeter> extends JPanel {
     private static final String SHIELDIMG_FILE = "files/Shield bar.png";
 
 
-
-
-    public StatusBar(){
+    public StatusBar() {
 
         try {
             if (healthImg == null) {
@@ -41,15 +39,17 @@ public class StatusBar<setShieldMeter> extends JPanel {
         }
 
     }
-    public static void setHealthmeter(int healthmeter){
-        StatusBar.healthmeter =healthmeter;
+
+    public static void setHealthmeter(int healthmeter) {
+        StatusBar.healthmeter = healthmeter;
     }
 
-    public static void setShieldMeter(int ShieldMeter){
-        StatusBar.shieldMeter =ShieldMeter;
+    public static void setShieldMeter(int ShieldMeter) {
+        StatusBar.shieldMeter = ShieldMeter;
     }
-    public static void setCash(int cash){
-        StatusBar.cash =cash;
+
+    public static void setCash(int cash) {
+        StatusBar.cash = cash;
     }
 
     @Override
@@ -58,22 +58,22 @@ public class StatusBar<setShieldMeter> extends JPanel {
     }
 
     @Override
-        public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Color barcolor = new Color((100-healthmeter)*(255/100), healthmeter*(255/100), 0);
-        g.drawImage(healthImg,10,10,null);
+        Color barcolor = new Color((100 - healthmeter) * (255 / 100), healthmeter * (255 / 100), 0);
+        g.drawImage(healthImg, 10, 10, null);
         g.setColor(Color.BLACK);
-        g.drawRect(79,9,501,11);
+        g.drawRect(79, 9, 501, 11);
         g.setColor(barcolor);
-        g.fillRect(80,10,5*healthmeter,10);
+        g.fillRect(80, 10, 5 * healthmeter, 10);
 
         Color shieldColor = new Color(70, 150, 180);
-        g.drawImage(ShieldImg,521+79,10,null);
+        g.drawImage(ShieldImg, 521 + 79, 10, null);
         g.setColor(Color.BLACK);
-        g.drawRect(521+79*2,9,501,11);
+        g.drawRect(521 + 79 * 2, 9, 501, 11);
         g.setColor(shieldColor);
-        g.fillRect(521+159,10,5*shieldMeter,10);
+        g.fillRect(521 + 159, 10, 5 * shieldMeter, 10);
 
     }
 }

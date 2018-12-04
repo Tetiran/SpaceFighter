@@ -14,25 +14,25 @@ public class Ship extends Entity {
     private int animationState;
     private int speed;
     private double angle;
-    private static final int RADIUS=100;
+    private static final int RADIUS = 100;
     private BufferedImage img;
     private static BufferedImage shieldimg;
     private int mainWeaponCooldown;
-    private final int WEAPON1COOLDOWN=20;
-    private final int WPNX =80;
-    private final int WPNY =30;
-    private  int animCountdown=8;
-    private int animPosition=0;
+    private final int WEAPON1COOLDOWN = 20;
+    private final int WPNX = 80;
+    private final int WPNY = 30;
+    private int animCountdown = 8;
+    private int animPosition = 0;
     private Sprite spriteSheeet;
-    private String SHIELDFILE="files/Shield.png";
+    private String SHIELDFILE = "files/Shield.png";
 
     public Ship(int posx, int posy, int width, int height, int health, int armor, int shield, int speed, String IMG_FILE) {
         super(posx, posy, width, height);
-        this.health=health;
-        this.armor=armor;
-        this.shield=shield;
-        this.speed=speed;
-        this.spriteSheeet =new Sprite(IMG_FILE);
+        this.health = health;
+        this.armor = armor;
+        this.shield = shield;
+        this.speed = speed;
+        this.spriteSheeet = new Sprite(IMG_FILE);
         this.setWidth(spriteSheeet.getGrid());
         this.setHeight(spriteSheeet.getGrid());
         this.setImg(spriteSheeet.getSprite(1));
@@ -55,20 +55,20 @@ public class Ship extends Entity {
         this.armor = armor;
     }
 
-    public void setShield(int shield){
-        this.shield=shield;
+    public void setShield(int shield) {
+        this.shield = shield;
     }
 
-    public void setAngle(double angle){
-        this.angle=angle;
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 
-    public void setImg(BufferedImage img){
-        this.img=img;
+    public void setImg(BufferedImage img) {
+        this.img = img;
     }
 
-    public void setMainWeaponCooldown(int mainWeaponCooldown){
-        this.mainWeaponCooldown=mainWeaponCooldown;
+    public void setMainWeaponCooldown(int mainWeaponCooldown) {
+        this.mainWeaponCooldown = mainWeaponCooldown;
     }
 
     // getters
@@ -97,22 +97,23 @@ public class Ship extends Entity {
     }
 
     @Override
-    public void damage(int damage){
-        if(shield>0){
-            this.shield= Math.max(0, shield-damage);
+    public void damage(int damage) {
+        if (shield > 0) {
+            this.shield = Math.max(0, shield - damage);
         } else {
             this.health = (int) Math.max(0, (health - Math.ceil((double) damage / armor)));
         }
         this.setMarkedForRemove(health <= 0);
     }
+
     @Override
-    public int getDamage(){
+    public int getDamage() {
         return 10;
     }
 
 
-    public void mainAttack(){
-        if(this.getMainCooldown()==0) {
+    public void mainAttack() {
+        if (this.getMainCooldown() == 0) {
 
             double angle = this.getAngle();
             this.setMainWeaponCooldown(WEAPON1COOLDOWN);
@@ -132,20 +133,19 @@ public class Ship extends Entity {
 
     @Override
     public void update() {
-        if(mainWeaponCooldown>0){
+        if (mainWeaponCooldown > 0) {
             mainWeaponCooldown--;
         }
         animCountdown--;
-        if(animCountdown<=0) {
+        if (animCountdown <= 0) {
             animPosition++;
-            if(animPosition<spriteSheeet.getSpriteNumber()-1) {
+            if (animPosition < spriteSheeet.getSpriteNumber() - 1) {
+                this.setImg(spriteSheeet.getSprite(animPosition));
+            } else {
+                animPosition = 0;
                 this.setImg(spriteSheeet.getSprite(animPosition));
             }
-            else {
-                animPosition=0;
-                this.setImg(spriteSheeet.getSprite(animPosition));
-            }
-            animCountdown=10;
+            animCountdown = 10;
         }
 
     }
@@ -154,22 +154,22 @@ public class Ship extends Entity {
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
-        AffineTransform at = new AffineTransform(1f,0f,0f,1f,this.getPosx(),this.getPosy());
+        AffineTransform at = new AffineTransform(1f, 0f, 0f, 1f, this.getPosx(), this.getPosy());
 
-        at.translate(-this.getWidth()/2.0,-this.getHeight()/2.0);
+        at.translate(-this.getWidth() / 2.0, -this.getHeight() / 2.0);
 
-        at.rotate(this.getAngle(), this.getWidth()/2.0, this.getHeight()/2.0);
+        at.rotate(this.getAngle(), this.getWidth() / 2.0, this.getHeight() / 2.0);
         g2d.drawImage(this.img, at, null);
         g.setColor(Color.ORANGE);
-        Ellipse2D ellipse = new Ellipse2D.Double(this.getPosx()-RADIUS/2.0, this.getPosy()-RADIUS/2.0,RADIUS,RADIUS);
-        AffineTransform ats = new AffineTransform(1f,0f,0f,1f,this.getPosx(),this.getPosy());
-        ats.translate(-shieldimg.getWidth()/2.0,-shieldimg.getHeight()/2.0);
+        Ellipse2D ellipse = new Ellipse2D.Double(this.getPosx() - RADIUS / 2.0, this.getPosy() - RADIUS / 2.0, RADIUS, RADIUS);
+        AffineTransform ats = new AffineTransform(1f, 0f, 0f, 1f, this.getPosx(), this.getPosy());
+        ats.translate(-shieldimg.getWidth() / 2.0, -shieldimg.getHeight() / 2.0);
         //g2d.draw(ellipse);
         this.setBounds(ellipse);
-        if (this.getShield()>0) {
+        if (this.getShield() > 0) {
             float opacity = 0.3f;
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-            g2d.drawImage(shieldimg,ats,null);
+            g2d.drawImage(shieldimg, ats, null);
         }
     }
 }
