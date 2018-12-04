@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Game implements Runnable{
+
+    public static int difficulty=1;
     public void run() {
 
         final JFrame frame = new JFrame("Cis120 In Space");

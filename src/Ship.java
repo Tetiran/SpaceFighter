@@ -100,9 +100,9 @@ public class Ship extends Entity {
     public void damage(int damage){
         if(shield>0){
             this.shield= Math.max(0, shield-damage);
+        } else {
+            this.health = (int) Math.max(0, (health - Math.ceil((double) damage / armor)));
         }
-        this.health = (int) Math.max(0, (health-Math.ceil((double)damage/armor)));
-
         this.setMarkedForRemove(health <= 0);
     }
     @Override
@@ -115,7 +115,6 @@ public class Ship extends Entity {
         if(this.getMainCooldown()==0) {
 
             double angle = this.getAngle();
-            LinkedList<Entity> adder = new LinkedList<Entity>();
             this.setMainWeaponCooldown(WEAPON1COOLDOWN);
 
             // so much god damm trig I want to die
@@ -125,9 +124,9 @@ public class Ship extends Entity {
             double newy2 = (WPNX) * Math.sin(angle) + (-WPNY) * Math.cos(angle);
 
             GameField.addEntity(new Laser(this.getPosx() + newx1,
-                    this.getPosy() + newy1, 32, 32, 100, 5, this.getAngle()));
+                    this.getPosy() + newy1, 32, 32, 10, 20, this.getAngle()));
             GameField.addEntity(new Laser(this.getPosx() + newx2,
-                    this.getPosy() + newy2, 32, 32, 100, 5, this.getAngle()));
+                    this.getPosy() + newy2, 32, 32, 10, 20, this.getAngle()));
         }
     }
 
@@ -168,7 +167,7 @@ public class Ship extends Entity {
         //g2d.draw(ellipse);
         this.setBounds(ellipse);
         if (this.getShield()>0) {
-            float opacity = 0.5f;
+            float opacity = 0.3f;
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
             g2d.drawImage(shieldimg,ats,null);
         }

@@ -44,12 +44,14 @@ public class StatusBar<setShieldMeter> extends JPanel {
     public static void setHealthmeter(int healthmeter){
         StatusBar.healthmeter =healthmeter;
     }
+
     public static void setShieldMeter(int ShieldMeter){
         StatusBar.shieldMeter =ShieldMeter;
     }
     public static void setCash(int cash){
         StatusBar.cash =cash;
     }
+
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(BAR_WIDTH, BAR_HEIGHT);

@@ -21,12 +21,17 @@ public class GameField extends  JPanel{
 
 
     private static BufferedImage img;
-    private PlayerShip player;
+    private static PlayerShip player;
     private StatusBar status;
     private EnemyShip enemy;
+    private Asteroid chunck;
+    private double asteroidSpawn=0;
+    private double LARGEPROABAILITY= .3;
 
     public static void addEntity(Entity entity){
-        entitiestoadd.add(entity);
+        if(entity != null) {
+            entitiestoadd.add(entity);
+        }
 
     }
 
@@ -39,10 +44,14 @@ public class GameField extends  JPanel{
         timer.start();
 
 
-        player = new PlayerShip(500, 500,32,32,100,100,100, 5);
-        enemy = new EnemyShip(300, 300,32,32,100,100,100, 5);
+        player = new PlayerShip(500, 500,32,32,100,1,100, 5);
+        enemy = new EnemyShip(300, 300,32,32,100,1,100, 5);
+        chunck = new AsteroidChunck(700,700,32,32,0,2,.01);
+
         entities.add(enemy);
         entities.add(player);
+        entities.add(chunck);
+
         setFocusable(true);
 
 
@@ -58,6 +67,7 @@ public class GameField extends  JPanel{
         });
 
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
         try {
             if (img == null) {
                 img = ImageIO.read(new File(IMG_FILE));
@@ -76,9 +86,11 @@ public class GameField extends  JPanel{
     }
 
     private void tick(){
+
         if(KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner()==null){
             pressed.clear();
         }
+
         if (pressed.contains('w')) {
             player.moveShip(1);
         }
@@ -94,37 +106,87 @@ public class GameField extends  JPanel{
         if (pressed.contains(' ')) {
             player.mainAttack();
         }
+
         entities.addAll(entitiestoadd);
+        entitiestoadd.clear();
+
         Iterator<Entity> iter = entities.iterator();
         while (iter.hasNext()) {
             Entity ent =iter.next();
             ent.update();
             for (Entity entity : entities) {
                 if(ent != entity) {
-                    if (ent.checkCollision(entity)) {
-                        ent.damage(entity.getDamage());
-                        entity.damage(ent.getDamage());
+                    if (!(ent instanceof Laser) || !(entity instanceof Laser)) {
+                        if (ent.checkCollision(entity)) {
+                            ent.damage(entity.getDamage());
+                            entity.damage(ent.getDamage());
+                        }
                     }
                 }
             }
             if(ent.getRemoveMark()){
                 iter.remove();
             }
+            //delete if out of bounds
+            if(ent.getPosx()>2000||ent.getPosx()<-1000){
+                iter.remove();
+            }
+            if(ent.getPosy()>2000||ent.getPosy()<-1000){
+                iter.remove();
+            }
         }
+
+        // asteroid random spawn
+        asteroidSpawn--;
+        if(asteroidSpawn<=0){
+            if (Math.random() <LARGEPROABAILITY) {
+                double posx=Math.random()*1500-500;
+                double posy=Math.random()*1000-900;
+                double angle=Math.random()*Math.PI;
+                double rollangle=Math.random()*.05;
+                double speed=Math.random()*3+1;
+                Asteroid asteroid= new Asteroid(posx,posy,32,32,angle,speed,rollangle);
+                addEntity(asteroid);
+
+            } else {
+                double posx=Math.random()*1500-500;
+                double posy=Math.random()*1000-900;
+                double angle=Math.random()*Math.PI;
+                double rollangle=Math.random()*.1;
+                double speed=Math.random()*8+2;
+                AsteroidChunck asteroid= new AsteroidChunck(posx,posy,32,32,angle,speed,rollangle);
+                addEntity(asteroid);
+
+            }
+
+            asteroidSpawn=100+Math.random()*200;
+        }
+
+
+
+
+
+
         player.updateCursor(this.getMousePosition());
         repaint();
         status.repaint();
+    }
+    public static Point.Double getPlayer(){
+        return new Point.Double(player.getPosx(),player.getPosy());
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         g.drawImage(img, 0, 0, this);
         player.draw(g);
+
         for (Entity entity : entities) {
             entity.draw(g);
             Graphics2D g2d = (Graphics2D) g.create();
             //g2d.draw(entity.getBounds());
         }
+
     }
 }

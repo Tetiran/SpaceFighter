@@ -15,6 +15,7 @@ public class PlayerShip extends Ship {
     }
 
     void moveShip(int direction) {
+
         switch (direction) {
             case 1:
                 this.setPosy(this.getPosy()-this.getSpeed());
@@ -29,20 +30,28 @@ public class PlayerShip extends Ship {
                 this.setPosx(this.getPosx()-this.getSpeed());
                 break;
         }
+
     }
+
     @Override
     public void damage(int damage){
 
         if(this.getShield()>0){
             this.setShield(Math.max(0, this.getShield()-damage));
+
+        } else {
+
+            this.setHealth((int) Math.max(0,
+                    this.getHealth()-Math.ceil((double)damage/this.getArmor())));
+
         }
-        this.setHealth((int) Math.max(0, (this.getHealth()-Math.ceil((double)damage/this.getArmor()))));
 
     }
 
     @Override
     public void update() {
         super.update();
+
         StatusBar.setHealthmeter(this.getHealth());
         StatusBar.setShieldMeter(this.getShield());
 
