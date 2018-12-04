@@ -26,7 +26,6 @@ public class GameField extends  JPanel{
     private static BufferedImage img;
     private static PlayerShip player;
     private StatusBar status;
-    private EnemyShip enemy;
     private double asteroidSpawn=0;
     private double LARGEPROABAILITY= .3;
     private static boolean bossPresent;
@@ -77,10 +76,7 @@ public class GameField extends  JPanel{
 
 
 
-        player = new PlayerShip(500, 500,32,32,100,1,100, 5);
-        enemy = new EnemyShip(300, 300,32,32,100,1,100, 5);
-
-        entities.add(enemy);
+        player = new PlayerShip(500, 500,32,32,500,1,200, 7);
         entities.add(player);
 
         this.setFocusable(true);
@@ -108,6 +104,7 @@ public class GameField extends  JPanel{
     }
 
     private void tick(){
+        EventScript.advanceScript();
 
         if(KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner()==null){
             pressed.clear();
@@ -148,7 +145,7 @@ public class GameField extends  JPanel{
             }
             if(ent.getRemoveMark()){
                 iter.remove();
-            } else if(ent.getPosx()>2000||ent.getPosx()<-1000){
+            } else if(ent.getPosx()>3000||ent.getPosx()<-1000){
                 iter.remove();
             } else if(ent.getPosy()>2000||ent.getPosy()<-1000){
                 iter.remove();

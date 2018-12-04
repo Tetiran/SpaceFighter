@@ -1,26 +1,68 @@
 <?xml version = "1.0"?>
 <Script>
     <Level>
-        <timestamp stamp="393">
+        <Event stamp="100">
             <Entity>EnemyShip</Entity>
             <health>100</health>
-            <armor>kad</armor>
-            <shield>dinkar</shield>
-            <speed>85</speed>
-        </timestamp>
-
-        <timestamp stamp="493">
-            <firstname>Vaneet</firstname>
-            <lastname>Gupta</lastname>
-            <nickname>vinni</nickname>
-            <marks>95</marks>
-        </timestamp>
-
-        <timestamp stamp="593">
-            <firstname>jasvir</firstname>
-            <lastname>singn</lastname>
-            <nickname>jazz</nickname>
-            <marks>90</marks>
-        </timestamp>
+            <armor>1</armor>
+            <shield>0</shield>
+            <speed>4</speed>
+        </Event>
+        <Event stamp="493">
+            <Entity>EnemyShip</Entity>
+            <health>100</health>
+            <armor>1</armor>
+            <shield>0</shield>
+            <speed>4</speed>
+        </Event>
+        <Event stamp="593">
+            <Entity>EnemyShip</Entity>
+            <health>100</health>
+            <armor>1</armor>
+            <shield>0</shield>
+            <speed>4</speed>
+        </Event>
+        <Event stamp="800">
+            <Entity>EnemyShip</Entity>
+            <health>100</health>
+            <armor>1</armor>
+            <shield>0</shield>
+            <speed>4</speed>
+        </Event>
+        <Event stamp="1000">
+            <Entity>EnemyShip</Entity>
+            <health>100</health>
+            <armor>1</armor>
+            <shield>0</shield>
+            <speed>4</speed>
+        </Event>
+        <Event stamp="1400">
+            <Entity>EnemyShip</Entity>
+            <health>100</health>
+            <armor>1</armor>
+            <shield>0</shield>
+            <speed>4</speed>
+        </Event>
+        <Event stamp="1800">
+            <Entity>EnemyShip</Entity>
+            <health>100</health>
+            <armor>1</armor>
+            <shield>0</shield>
+            <speed>4</speed>
+        </Event>
+        <Event stamp="2355">
+            <Entity>EnemyShip</Entity>
+            <health>100</health>
+            <armor>1</armor>
+            <shield>0</shield>
+            <speed>4</speed>
+        </Event>
+        <Event stamp="3000">
+            <Entity>EnemyShip</Entity>
+            <health>300</health>
+            <armor>20</armor>
+            <shield>200</shield>
+            <speed>15</speed>
+        </Event>
     </Level>
 </Script>

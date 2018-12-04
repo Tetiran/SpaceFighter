@@ -10,7 +10,7 @@ public class Game implements Runnable {
     static int difficulty = 1;
 
     public static void startGame() {
-
+        EventScript.loadDoc();
         frame.getContentPane().removeAll();
         frame.dispose();
         frame.setUndecorated(true);
