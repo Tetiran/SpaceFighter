@@ -15,16 +15,18 @@ public class Laser extends Entity {
     private static int WIDTH = 24;
     private static int HEIGHT = 8;
     private int spawnCoolDown = 8;
+    private boolean userLaser;
 
 
     private BufferedImage img;
 
 
-    public Laser(double posx, double posy, int width, int height, int damage, double speed, double angle) {
+    public Laser(double posx, double posy, int width, int height, int damage, double speed, double angle, boolean userLaser) {
         super(posx, posy, width, height);
         this.damage = damage;
         this.speed = speed;
         this.angle = angle;
+        this.userLaser=userLaser;
 
         try {
             if (img == null) {
@@ -36,6 +38,11 @@ public class Laser extends Entity {
         }
         this.setWidth(img.getWidth());
         this.setHeight(img.getHeight());
+    }
+
+
+    public boolean getOwner() {
+        return this.userLaser;
     }
 
     @Override

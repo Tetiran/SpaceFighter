@@ -14,74 +14,33 @@ import java.util.Set;
 import java.util.TreeSet;
 
 // main game state
-public class GameField extends  JPanel{
-    private int score;
+public class GameField extends JPanel {
     private static final String IMG_FILE = "files/background.jpg";
     private static final int INTERVAL = 15;
-    private Set<Character> pressed = new TreeSet<>();
-    private LinkedList<Entity> entities = new LinkedList<>();
+    public static int numEnemies;
     private static LinkedList<Entity> entitiestoadd = new LinkedList<>();
-
-
     private static BufferedImage img;
     private static PlayerShip player;
-    private StatusBar status;
-    private double asteroidSpawn=0;
-    private double LARGEPROABAILITY= .3;
     private static boolean bossPresent;
     private static double bossHealth;
     private static double BossMax;
     private static String Bossname;
+    Timer timer;
+    private int score = 0;
+    private Set<Character> pressed = new TreeSet<>();
+    private LinkedList<Entity> entities = new LinkedList<>();
+    private StatusBar status;
+    private double asteroidSpawn = 0;
+    private double LARGEPROABAILITY = .3;
 
-
-    public static void setBoss(boolean boss,String name, int health, int healthmax){
-        bossPresent=boss;
-        bossHealth=health;
-        BossMax=healthmax;
-        Bossname=name;
-
-
-    }
-
-    public static void addEntity(Entity entity){
-        if(entity != null) {
-            entitiestoadd.add(entity);
-        }
-
-    }
-    public void startGame(){
-        setBoss(true,"Space Kracken",500,500);
-        Timer timer = new Timer(INTERVAL, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                tick();
-            }
-        });
-        timer.start();
-
-        addKeyListener( new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-
-                pressed.add(e.getKeyChar());
-            }
-            @Override
-            public  void keyReleased(KeyEvent e) {
-                pressed.remove(e.getKeyChar());
-            }
-
-        });
-
-    }
 
     public GameField() {
 
 
-
-        player = new PlayerShip(500, 500,32,32,500,1,200, 7);
+        player = new PlayerShip(500, 500, 32, 32, 500, 1, 200, 7);
         entities.add(player);
 
         this.setFocusable(true);
-
-
 
 
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -95,18 +54,70 @@ public class GameField extends  JPanel{
         }
 
 
-
-
-        this.setPreferredSize( new Dimension( 1920, 1080 ) );
-    }
-    public void updateBar(StatusBar status){
-        this.status=status;
+        this.setPreferredSize(new Dimension(1920, 1080));
     }
 
-    private void tick(){
+    public static void setBoss(boolean boss, String name, int health, int healthmax) {
+        bossPresent = boss;
+        bossHealth = health;
+        BossMax = healthmax;
+        Bossname = name;
+
+
+    }
+
+    public static void addEntity(Entity entity) {
+        if (entity != null) {
+            entitiestoadd.add(entity);
+        }
+
+    }
+
+    public static Point.Double getPlayer() {
+        return new Point.Double(player.getPosx(), player.getPosy());
+    }
+
+    public void startGame() {
+        //setBoss(true,"Space Kracken",500,500);
+        timer = new Timer(INTERVAL, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                tick();
+            }
+        });
+        timer.start();
+
+        addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+
+                pressed.add(e.getKeyChar());
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                pressed.remove(e.getKeyChar());
+            }
+
+        });
+
+    }
+
+    public void updateBar(StatusBar status) {
+        this.status = status;
+    }
+
+    private void tick() {
+        if (player.getHealth() <= 0) {
+            timer.stop();
+            final JFrame frame = new JFrame("");
+            JOptionPane.showMessageDialog(frame, "I almost didn't program a way to die " +
+                    "because it's so hard too...      Congratulation  ");
+            Game.endGame();
+
+        }
         EventScript.advanceScript();
 
-        if(KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner()==null){
+
+        if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == null) {
             pressed.clear();
         }
 
@@ -130,60 +141,73 @@ public class GameField extends  JPanel{
         entitiestoadd.clear();
 
         Iterator<Entity> iter = entities.iterator();
+        numEnemies = 0;
         while (iter.hasNext()) {
-            Entity ent =iter.next();
+            Entity ent = iter.next();
             ent.update();
+            if (ent instanceof EnemyShip) {
+                numEnemies++;
+            }
             for (Entity entity : entities) {
-                if(ent != entity) {
+                if (ent != entity) {
                     if (!(ent instanceof Laser) || !(entity instanceof Laser)) {
                         if (ent.checkCollision(entity)) {
                             ent.damage(entity.getDamage());
                             entity.damage(ent.getDamage());
+                            if (ent instanceof Laser) {
+                                if (((Laser) ent).getOwner()) {
+                                    score += ent.getDamage();
+                                    StatusBar.setScore(score);
+                                }
+                            } else if (entity instanceof Laser) {
+                                if (((Laser) entity).getOwner()) {
+                                    score += entity.getDamage();
+                                    StatusBar.setScore(score);
+                                }
+                            }
+
                         }
                     }
                 }
             }
-            if(ent.getRemoveMark()){
+            if (ent.getRemoveMark()) {
                 iter.remove();
-            } else if(ent.getPosx()>3000||ent.getPosx()<-1000){
+            } else if (ent.getPosx() > 3000 || ent.getPosx() < -1000) {
                 iter.remove();
-            } else if(ent.getPosy()>2000||ent.getPosy()<-1000){
+            } else if (ent.getPosy() > 2000 || ent.getPosy() < -1000) {
                 iter.remove();
             }
         }
 
         // asteroid random spawn
         asteroidSpawn--;
-        if(asteroidSpawn<=0){
-            if (Math.random() <LARGEPROABAILITY) {
-                double posx=Math.random()*1500-500;
-                double posy=Math.random()*1000-900;
-                double angle=Math.random()*Math.PI;
-                double rollangle=Math.random()*.05;
-                double speed=Math.random()*3+1;
-                Asteroid asteroid= new Asteroid(posx,posy,32,32,angle,speed,rollangle);
+        if (asteroidSpawn <= 0) {
+            if (Math.random() < LARGEPROABAILITY) {
+                double posx = Math.random() * 1500 - 500;
+                double posy = Math.random() * 1000 - 900;
+                double angle = Math.random() * Math.PI;
+                double rollangle = Math.random() * .05;
+                double speed = Math.random() * 3 + 1;
+                Asteroid asteroid = new Asteroid(posx, posy, 32, 32, angle, speed, rollangle);
                 addEntity(asteroid);
 
             } else {
-                double posx=Math.random()*1500-500;
-                double posy=Math.random()*1000-900;
-                double angle=Math.random()*Math.PI;
-                double rollangle=Math.random()*.1;
-                double speed=Math.random()*8+2;
-                AsteroidChunck asteroid= new AsteroidChunck(posx,posy,32,32,angle,speed,rollangle);
+                double posx = Math.random() * 1500 - 500;
+                double posy = Math.random() * 1000 - 900;
+                double angle = Math.random() * Math.PI;
+                double rollangle = Math.random() * .1;
+                double speed = Math.random() * 8 + 2;
+                AsteroidChunck asteroid = new AsteroidChunck(posx, posy, 32, 32, angle, speed, rollangle);
                 addEntity(asteroid);
 
             }
 
-            asteroidSpawn=100+Math.random()*200;
+            asteroidSpawn = 100 + Math.random() * 200;
         }
 
         player.updateCursor(this.getMousePosition());
         repaint();
         status.repaint();
-    }
-    public static Point.Double getPlayer(){
-        return new Point.Double(player.getPosx(),player.getPosy());
     }
 
     @Override
@@ -198,21 +222,20 @@ public class GameField extends  JPanel{
             Graphics2D g2d = (Graphics2D) g.create();
             //g2d.draw(entity.getBounds());
         }
-        if(bossPresent){
+        if (bossPresent) {
             //draw bossbar
             Graphics2D g2d = (Graphics2D) g.create();
             Color barcolor = new Color(31, 49, 204);
-            Font f=new Font("LucidaTypewriterBold", Font.PLAIN, 30);
+            Font f = new Font("LucidaTypewriterBold", Font.PLAIN, 30);
             g2d.setFont(f);
             FontMetrics metrics = g2d.getFontMetrics();
-            g2d.drawString(Bossname,(1920/2)-metrics.stringWidth(Bossname)/2,30);
+            g2d.drawString(Bossname, (1920 / 2) - metrics.stringWidth(Bossname) / 2, 30);
             g.setColor(Color.BLACK);
-            g.drawRect((1920/2)-250, 39, 501, 11);
+            g.drawRect((1920 / 2) - 250, 39, 501, 11);
             g.setColor(barcolor);
-            g.fillRect((1920/2)-250+1, 40, (int)( 500*bossHealth/BossMax), 10);
+            g.fillRect((1920 / 2) - 250 + 1, 40, (int) (500 * bossHealth / BossMax), 10);
 
         }
-
 
     }
 }

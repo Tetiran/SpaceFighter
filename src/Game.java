@@ -6,10 +6,13 @@ import java.awt.event.ActionListener;
 public class Game implements Runnable {
 
     private static final JFrame frame = new JFrame("Cis120 In Space");
-    private static final GameField field = new GameField();
     static int difficulty = 1;
+    public static void endGame(){
+        System.exit(0);
+    }
 
     public static void startGame() {
+        final GameField field = new GameField();
         EventScript.loadDoc();
         frame.getContentPane().removeAll();
         frame.dispose();

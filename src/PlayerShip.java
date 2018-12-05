@@ -7,6 +7,9 @@ public class PlayerShip extends Ship {
     private int shieldCoolDown=150;
     private int shieldMax;
     private int healthMax;
+    private final int WEAPON1COOLDOWN = 20;
+    private final int WPNX = 80;
+    private final int WPNY = 30;
 
 
     public PlayerShip(int posx, int posy, int width, int height,
@@ -92,10 +95,24 @@ public class PlayerShip extends Ship {
             this.setAngle(this.getAngle());
         }
     }
-
     @Override
     public void mainAttack() {
-        super.mainAttack();
+        if (this.getMainCooldown() == 0) {
+
+            double angle = this.getAngle();
+            this.setMainWeaponCooldown(WEAPON1COOLDOWN);
+
+            // so much god damm trig I want to die
+            double newx1 = (WPNX) * Math.cos(angle) - (WPNY) * Math.sin(angle);
+            double newy1 = (WPNX) * Math.sin(angle) + (WPNY) * Math.cos(angle);
+            double newx2 = (WPNX) * Math.cos(angle) - (-WPNY) * Math.sin(angle);
+            double newy2 = (WPNX) * Math.sin(angle) + (-WPNY) * Math.cos(angle);
+
+            GameField.addEntity(new Laser(this.getPosx() + newx1,
+                    this.getPosy() + newy1, 32, 32, 10, 20, this.getAngle(), true));
+            GameField.addEntity(new Laser(this.getPosx() + newx2,
+                    this.getPosy() + newy2, 32, 32, 10, 20, this.getAngle(), true));
+        }
     }
 
     @Override

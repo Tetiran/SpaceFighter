@@ -125,9 +125,9 @@ public class Ship extends Entity {
             double newy2 = (WPNX) * Math.sin(angle) + (-WPNY) * Math.cos(angle);
 
             GameField.addEntity(new Laser(this.getPosx() + newx1,
-                    this.getPosy() + newy1, 32, 32, 10, 20, this.getAngle()));
+                    this.getPosy() + newy1, 32, 32, 10, 20, this.getAngle(), false));
             GameField.addEntity(new Laser(this.getPosx() + newx2,
-                    this.getPosy() + newy2, 32, 32, 10, 20, this.getAngle()));
+                    this.getPosy() + newy2, 32, 32, 10, 20, this.getAngle(), false));
         }
     }
 

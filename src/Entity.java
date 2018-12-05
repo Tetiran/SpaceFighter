@@ -51,7 +51,7 @@ public abstract class Entity {
         if(check.getBounds() != null&& this.getBounds() != null) {
             Area checkArea = new Area(check.getBounds());
             checkArea.intersect(new Area(this.getBounds()));
-            //System.out.println(bounds.getBounds().height);
+
 
             return !checkArea.isEmpty();
         }

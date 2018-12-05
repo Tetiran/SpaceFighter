@@ -12,7 +12,7 @@ public class StatusBar<setShieldMeter> extends JPanel {
     private static int healthmeterMax=2000;
     private static int shieldMeter;
     private static int shieldMeterMax=2000;
-    private static int cash;
+    private static int score;
     private static BufferedImage healthImg;
     private static final String HEALTHIMG_FILE = "files/Health bar.png";
     private static BufferedImage ShieldImg;
@@ -55,8 +55,8 @@ public class StatusBar<setShieldMeter> extends JPanel {
         StatusBar.shieldMeterMax = ShieldMeterMax;
     }
 
-    public static void setCash(int cash) {
-        StatusBar.cash = cash;
+    public static void setScore(int score) {
+        StatusBar.score = score;
     }
 
     @Override
@@ -68,8 +68,8 @@ public class StatusBar<setShieldMeter> extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Color barcolor = new Color((100 -(int) ((double)(healthmeter/healthmeterMax)))
-                * (255/100),(int)((double) (healthmeter * (255 / healthmeterMax))), 0);
+        Color barcolor = new Color((100 -(int) ( (double)(healthmeter/healthmeterMax)
+                * (255/100))),(int)((double) (healthmeter * (255 / healthmeterMax))), 0);
         g.drawImage(healthImg, 10, 10, null);
         g.setColor(Color.BLACK);
         g.drawRect(79, 9, 501, 11);
@@ -82,6 +82,12 @@ public class StatusBar<setShieldMeter> extends JPanel {
         g.drawRect(521 + 79 * 2, 9, 501, 11);
         g.setColor(shieldColor);
         g.fillRect(521 + 159, 10, (int)(500 *( (double)shieldMeter/shieldMeterMax)), 10);
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.BLACK);
+        Font f=new Font("LucidaTypewriterBold", Font.PLAIN, 20);
+        g2d.setFont(f);
+        g2d.drawString(Integer.toString(score),1500,20);
+
 
     }
 }
