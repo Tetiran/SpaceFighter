@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 public abstract class Entity {
     private double posx;
@@ -10,9 +11,10 @@ public abstract class Entity {
     private boolean markedForRemove;
     private Shape bounds;
     private int damage;
+    private Area intesrct;
 
 
-    public Entity(double posx, double posy, int width, int height) {
+    Entity(double posx, double posy, int width, int height) {
         this.posx = posx;
         this.posy = posy;
 
@@ -35,11 +37,11 @@ public abstract class Entity {
         this.height = height;
     }
 
-    public void setMarkedForRemove(boolean x) {
+    void setMarkedForRemove(boolean x) {
         this.markedForRemove = x;
 
     }
-    public void setBounds(Shape bounds) {
+    void setBounds(Shape bounds) {
         this.bounds = bounds;
 
     }
@@ -47,12 +49,10 @@ public abstract class Entity {
         this.damage=damage;
     }
 
-    public boolean checkCollision(Entity check){
+    boolean checkCollision(Entity check){
         if(check.getBounds() != null&& this.getBounds() != null) {
             Area checkArea = new Area(check.getBounds());
             checkArea.intersect(new Area(this.getBounds()));
-
-
             return !checkArea.isEmpty();
         }
         return false;
@@ -79,11 +79,11 @@ public abstract class Entity {
         return this.height;
     }
 
-    public boolean getRemoveMark() {
+    boolean getRemoveMark() {
         return this.markedForRemove;
     }
 
-    public Shape getBounds() {
+    private Shape getBounds() {
 
         return this.bounds;
     }
@@ -93,5 +93,13 @@ public abstract class Entity {
 
     public abstract void update();
 
-    public abstract void  draw(Graphics g);
+    public  void  draw(Graphics g){
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.ORANGE);
+        if(bounds!=null) {
+            g2d.draw(bounds);
+        }
+
+    }
 }

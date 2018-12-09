@@ -6,35 +6,35 @@
             <health>100</health>
             <armor>1</armor>
             <shield>0</shield>
-            <speed>4</speed>
+            <speed>5</speed>
         </Event>
         <Event stamp="493">
             <Entity>EnemyShip</Entity>
             <health>100</health>
             <armor>1</armor>
             <shield>0</shield>
-            <speed>4</speed>
+            <speed>5</speed>
         </Event>
         <Event stamp="593">
             <Entity>EnemyShip</Entity>
             <health>100</health>
             <armor>1</armor>
             <shield>0</shield>
-            <speed>4</speed>
+            <speed>5</speed>
         </Event>
         <Event stamp="800">
             <Entity>EnemyShip</Entity>
             <health>100</health>
             <armor>1</armor>
             <shield>0</shield>
-            <speed>4</speed>
+            <speed>5</speed>
         </Event>
         <Event stamp="1000">
             <Entity>EnemyShip</Entity>
             <health>100</health>
             <armor>1</armor>
             <shield>0</shield>
-            <speed>4</speed>
+            <speed>5</speed>
         </Event>
         <Event stamp="1400">
             <Entity>EnemyShip</Entity>
@@ -48,14 +48,14 @@
             <health>100</health>
             <armor>1</armor>
             <shield>0</shield>
-            <speed>4</speed>
+            <speed>5</speed>
         </Event>
         <Event stamp="2355">
             <Entity>EnemyShip</Entity>
             <health>100</health>
             <armor>1</armor>
             <shield>0</shield>
-            <speed>4</speed>
+            <speed>5</speed>
         </Event>
         <Event stamp="3000">
             <Entity>EnemyShip</Entity>

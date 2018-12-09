@@ -7,16 +7,16 @@ public class Game implements Runnable {
 
     private static final JFrame frame = new JFrame("Cis120 In Space");
     static int difficulty = 1;
-    public static void endGame(){
+    static void endGame(){
         System.exit(0);
     }
 
-    public static void startGame() {
+    private static void startGame() {
         final GameField field = new GameField();
         EventScript.loadDoc();
         frame.getContentPane().removeAll();
         frame.dispose();
-        frame.setUndecorated(true);
+        //frame.setUndecorated(true);
         // Main playing area
 
         frame.add(field, BorderLayout.CENTER);
@@ -28,8 +28,8 @@ public class Game implements Runnable {
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
-        // required to force keyhandeling
 
+        // required to force keyhandeling
         field.grabFocus();
         field.startGame();
 

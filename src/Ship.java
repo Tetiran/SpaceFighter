@@ -1,8 +1,10 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -25,8 +27,9 @@ public class Ship extends Entity {
     private int animPosition = 0;
     private Sprite spriteSheeet;
     private String SHIELDFILE = "files/Shield.png";
+    private Area hitRegion;
 
-    public Ship(int posx, int posy, int width, int height, int health, int armor, int shield, int speed, String IMG_FILE) {
+    Ship(int posx, int posy, int width, int height, int health, int armor, int shield, int speed, String IMG_FILE) {
         super(posx, posy, width, height);
         this.health = health;
         this.armor = armor;
@@ -36,6 +39,8 @@ public class Ship extends Entity {
         this.setWidth(spriteSheeet.getGrid());
         this.setHeight(spriteSheeet.getGrid());
         this.setImg(spriteSheeet.getSprite(1));
+        hitRegion=ParseMeBaby.areaFromImg(img);
+
 
         try {
             shieldimg = ImageIO.read(new File(SHIELDFILE));
@@ -47,7 +52,7 @@ public class Ship extends Entity {
     }
 
     //setters
-    public void setHealth(int health) {
+    void setHealth(int health) {
         this.health = health;
     }
 
@@ -55,44 +60,44 @@ public class Ship extends Entity {
         this.armor = armor;
     }
 
-    public void setShield(int shield) {
+    void setShield(int shield) {
         this.shield = shield;
     }
 
-    public void setAngle(double angle) {
+    void setAngle(double angle) {
         this.angle = angle;
     }
 
-    public void setImg(BufferedImage img) {
+    private void setImg(BufferedImage img) {
         this.img = img;
     }
 
-    public void setMainWeaponCooldown(int mainWeaponCooldown) {
+    void setMainWeaponCooldown(int mainWeaponCooldown) {
         this.mainWeaponCooldown = mainWeaponCooldown;
     }
 
     // getters
-    public int getHealth() {
+    int getHealth() {
         return this.health;
     }
 
-    public int getArmor() {
+    int getArmor() {
         return this.armor;
     }
 
-    public int getShield() {
+    int getShield() {
         return this.shield;
     }
 
-    public double getAngle() {
+    double getAngle() {
         return this.angle;
     }
 
-    public int getMainCooldown() {
+    int getMainCooldown() {
         return this.mainWeaponCooldown;
     }
 
-    public int getSpeed() {
+    int getSpeed() {
         return this.speed;
     }
 
@@ -153,19 +158,32 @@ public class Ship extends Entity {
 
     @Override
     public void draw(Graphics g) {
+        super.draw(g);
+        Area hitCalculate=hitRegion;
         Graphics2D g2d = (Graphics2D) g.create();
         AffineTransform at = new AffineTransform(1f, 0f, 0f, 1f, this.getPosx(), this.getPosy());
-
+        AffineTransform ats = new AffineTransform(at);
+        AffineTransform atz= new AffineTransform(at);
         at.translate(-this.getWidth() / 2.0, -this.getHeight() / 2.0);
 
         at.rotate(this.getAngle(), this.getWidth() / 2.0, this.getHeight() / 2.0);
         g2d.drawImage(this.img, at, null);
-        g.setColor(Color.ORANGE);
-        Ellipse2D ellipse = new Ellipse2D.Double(this.getPosx() - RADIUS / 2.0, this.getPosy() - RADIUS / 2.0, RADIUS, RADIUS);
-        AffineTransform ats = new AffineTransform(1f, 0f, 0f, 1f, this.getPosx(), this.getPosy());
+
+
         ats.translate(-shieldimg.getWidth() / 2.0, -shieldimg.getHeight() / 2.0);
-        //g2d.draw(ellipse);
-        this.setBounds(ellipse);
+
+
+        atz.rotate(this.getAngle(), this.getWidth() / 2.0, this.getHeight() / 2.0);
+
+        hitCalculate=hitCalculate.createTransformedArea(atz);
+        AffineTransform atq= new AffineTransform(1f, 0f, 0f, 1f, -this.getWidth() / 2.0, -this.getHeight() / 2.0);
+        hitCalculate=hitCalculate.createTransformedArea(atq);
+        Shape s =hitCalculate;
+
+
+
+
+        this.setBounds(s);
         if (this.getShield() > 0) {
             float opacity = 0.3f;
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));

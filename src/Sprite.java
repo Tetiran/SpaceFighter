@@ -1,14 +1,13 @@
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
-public class Sprite {
+class Sprite {
 
     private BufferedImage spriteSheet;
 
-    public Sprite(String file) {
+    Sprite(String file) {
         try {
             this.spriteSheet = ImageIO.read(new File(file));
 
@@ -16,19 +15,19 @@ public class Sprite {
         } catch (IOException e) {
             System.out.println("Internal Error:" + e.getMessage());
         }
+
     }
 
-    public int getSpriteNumber() {
+    int getSpriteNumber() {
         return spriteSheet.getHeight() / spriteSheet.getWidth();
     }
 
-    public int getGrid() {
+    int getGrid() {
         return spriteSheet.getWidth();
     }
 
-    public BufferedImage getSprite(int position) {
+    BufferedImage getSprite(int position) {
         return this.spriteSheet.getSubimage(0, this.getGrid() * position, this.getGrid(), this.getGrid());
     }
 
 }
-

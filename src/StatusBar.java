@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class StatusBar<setShieldMeter> extends JPanel {
     private static final int BAR_WIDTH = 1920;
-    public static final int BAR_HEIGHT = 30;
+    private static final int BAR_HEIGHT = 30;
     private static int healthmeter;
     private static int healthmeterMax=2000;
     private static int shieldMeter;
@@ -19,7 +19,7 @@ public class StatusBar<setShieldMeter> extends JPanel {
     private static final String SHIELDIMG_FILE = "files/Shield bar.png";
 
 
-    public StatusBar() {
+    StatusBar() {
 
         try {
             if (healthImg == null) {
@@ -40,22 +40,22 @@ public class StatusBar<setShieldMeter> extends JPanel {
 
     }
 
-    public static void setHealthmeter(int healthmeter) {
+    static void setHealthmeter(int healthmeter) {
         StatusBar.healthmeter = healthmeter;
     }
 
-    public static void setShieldMeter(int ShieldMeter) {
+    static void setShieldMeter(int ShieldMeter) {
         StatusBar.shieldMeter = ShieldMeter;
     }
-    public static void setHealthmeterMax(int healthmeterMax) {
+    static void setHealthmeterMax(int healthmeterMax) {
         StatusBar.healthmeterMax = healthmeterMax;
     }
 
-    public static void setShieldMeterMax(int ShieldMeterMax) {
+    static void setShieldMeterMax(int ShieldMeterMax) {
         StatusBar.shieldMeterMax = ShieldMeterMax;
     }
 
-    public static void setScore(int score) {
+    static void setScore(int score) {
         StatusBar.score = score;
     }
 

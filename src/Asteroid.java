@@ -3,6 +3,7 @@ import javafx.scene.shape.Ellipse;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -21,10 +22,11 @@ public class Asteroid extends Entity {
     private int animCountdown=12;
     private boolean playDeath=false;
     private boolean chuckSummon=false;
+    private Area hitRegion;
 
 
-    public Asteroid(double posx, double posy, int width, int height, double angle,
-                    double speed, double rollAngleIncer) {
+    Asteroid(double posx, double posy, int width, int height, double angle,
+             double speed, double rollAngleIncer) {
         super(posx, posy, width, height);
         this.angle=angle;
         this.speed=speed;
@@ -34,6 +36,7 @@ public class Asteroid extends Entity {
         img = spriteSheeet.getSprite(0);
         this.setWidth(img.getWidth());
         this.setHeight(img.getHeight());
+        hitRegion=ParseMeBaby.areaFromImg(img);
     }
 
     @Override
@@ -69,7 +72,7 @@ public class Asteroid extends Entity {
     }
 
 
-    public void deathSummon(){
+    private void deathSummon(){
         double posx=this.getPosx()+Math.random()*(this.getWidth()+2*50);
         double posy=this.getPosy()+Math.random()*(this.getHeight()+2*50);
         double angle=Math.random()*2*Math.PI;
@@ -99,17 +102,21 @@ public class Asteroid extends Entity {
 
     @Override
     public void draw(Graphics g) {
+        super.draw(g);
+
         Graphics2D g2d = (Graphics2D) g.create();
         AffineTransform at = new AffineTransform(1f,0f,0f,1f,this.getPosx(),this.getPosy());
         at.translate(-this.getWidth()/2.0,-this.getHeight()/2.0);
         at.rotate(rollAngle, this.getWidth()/2.0, this.getHeight()/2.0);
         g2d.drawImage(this.img, at, null);
 
-        Ellipse2D ellipse = new Ellipse2D.Double(this.getPosx()-this.getWidth()/2., this.getPosy()-this.getWidth()/2., this.getWidth(), this.getHeight());
+        //Ellipse2D ellipse = new Ellipse2D.Double(this.getPosx()-this.getWidth()/2., this.getPosy()-this.getWidth()/2., this.getWidth(), this.getHeight());
         AffineTransform transform = new AffineTransform();
         transform.translate(this.getPosx(), this.getPosy());
         transform.rotate(angle);
-        this.setBounds(ellipse);
+        Area hitBound=hitRegion;
+        hitBound=hitBound.createTransformedArea(at);
+        this.setBounds(hitBound);
 
     }
 }

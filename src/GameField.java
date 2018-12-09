@@ -13,19 +13,20 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 
-// main game state
+
 public class GameField extends JPanel {
     private static final String IMG_FILE = "files/background.jpg";
     private static final int INTERVAL = 15;
-    public static int numEnemies;
+    private static int numEnemies;
     private static LinkedList<Entity> entitiestoadd = new LinkedList<>();
     private static BufferedImage img;
     private static PlayerShip player;
+    private static EnemyShip test;
     private static boolean bossPresent;
     private static double bossHealth;
     private static double BossMax;
     private static String Bossname;
-    Timer timer;
+    private Timer timer;
     private int score = 0;
     private Set<Character> pressed = new TreeSet<>();
     private LinkedList<Entity> entities = new LinkedList<>();
@@ -34,11 +35,13 @@ public class GameField extends JPanel {
     private double LARGEPROABAILITY = .3;
 
 
-    public GameField() {
 
+    GameField() {
+        test = new EnemyShip(500,500,32,32,50,1,0,1);
 
         player = new PlayerShip(500, 500, 32, 32, 500, 1, 200, 7);
         entities.add(player);
+        entities.add(test);
 
         this.setFocusable(true);
 
@@ -57,7 +60,7 @@ public class GameField extends JPanel {
         this.setPreferredSize(new Dimension(1920, 1080));
     }
 
-    public static void setBoss(boolean boss, String name, int health, int healthmax) {
+    static void setBoss(boolean boss, String name, int health, int healthmax) {
         bossPresent = boss;
         bossHealth = health;
         BossMax = healthmax;
@@ -66,18 +69,18 @@ public class GameField extends JPanel {
 
     }
 
-    public static void addEntity(Entity entity) {
+    static void addEntity(Entity entity) {
         if (entity != null) {
             entitiestoadd.add(entity);
         }
 
     }
 
-    public static Point.Double getPlayer() {
+    static Point.Double getPlayer() {
         return new Point.Double(player.getPosx(), player.getPosy());
     }
 
-    public void startGame() {
+    void startGame() {
         //setBoss(true,"Space Kracken",500,500);
         timer = new Timer(INTERVAL, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -101,7 +104,7 @@ public class GameField extends JPanel {
 
     }
 
-    public void updateBar(StatusBar status) {
+    void updateBar(StatusBar status) {
         this.status = status;
     }
 
@@ -149,24 +152,29 @@ public class GameField extends JPanel {
                 numEnemies++;
             }
             for (Entity entity : entities) {
-                if (ent != entity) {
+
                     if (!(ent instanceof Laser) || !(entity instanceof Laser)) {
-                        if (ent.checkCollision(entity)) {
-                            ent.damage(entity.getDamage());
-                            entity.damage(ent.getDamage());
-                            if (ent instanceof Laser) {
-                                if (((Laser) ent).getOwner()) {
-                                    score += ent.getDamage();
-                                    StatusBar.setScore(score);
-                                }
-                            } else if (entity instanceof Laser) {
-                                if (((Laser) entity).getOwner()) {
-                                    score += entity.getDamage();
-                                    StatusBar.setScore(score);
+                        if (ent != entity) {
+                            //this increases speed by 100x
+                            if((Math.abs(ent.getPosx()-entity.getPosx())<200)&&
+                                    (Math.abs(ent.getPosy()-entity.getPosy())<200)) {
+                                if (ent.checkCollision(entity)) {
+                                    ent.damage(entity.getDamage());
+                                    entity.damage(ent.getDamage());
+                                    if (ent instanceof Laser) {
+                                        if (((Laser) ent).getOwner()) {
+                                            score += ent.getDamage();
+                                            StatusBar.setScore(score);
+                                        }
+                                    } else if (entity instanceof Laser) {
+                                        if (((Laser) entity).getOwner()) {
+                                            score += entity.getDamage();
+                                            StatusBar.setScore(score);
+                                        }
+                                    }
+
                                 }
                             }
-
-                        }
                     }
                 }
             }
@@ -220,7 +228,6 @@ public class GameField extends JPanel {
         for (Entity entity : entities) {
             entity.draw(g);
             Graphics2D g2d = (Graphics2D) g.create();
-            //g2d.draw(entity.getBounds());
         }
         if (bossPresent) {
             //draw bossbar

@@ -1,9 +1,10 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
-public class AsteroidChunck extends Asteroid {
+public class AsteroidChunck extends Entity {
 
     private double angle;
     private double speed;
@@ -15,9 +16,10 @@ public class AsteroidChunck extends Asteroid {
     private int animPosition=0;
     private int animCountdown=12;
     private boolean playDeath=false;
+    private Area hitRegion;
 
-    public AsteroidChunck(double posx, double posy, int width, int height, double angle, double speed, double rollAngleIncer) {
-        super(posx, posy, width, height, angle, speed, rollAngleIncer);
+    AsteroidChunck(double posx, double posy, int width, int height, double angle, double speed, double rollAngleIncer) {
+        super(posx, posy, width, height);
         this.angle=angle;
         this.speed=speed;
         this.rollAngleIncer=rollAngleIncer;
@@ -26,6 +28,7 @@ public class AsteroidChunck extends Asteroid {
         img = spriteSheeet.getSprite(0);
         this.setWidth(img.getWidth());
         this.setHeight(img.getHeight());
+        hitRegion=ParseMeBaby.areaFromImg(img);
     }
     @Override
     public void update() {
@@ -67,20 +70,19 @@ public class AsteroidChunck extends Asteroid {
 
     @Override
     public void draw(Graphics g) {
-
+        super.draw(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
         AffineTransform at = new AffineTransform(1f,0f,0f,1f,this.getPosx(),this.getPosy());
         at.translate(-this.getWidth()/2.0,-this.getHeight()/2.0);
         at.rotate(rollAngle, this.getWidth()/2.0, this.getHeight()/2.0);
-
         g2d.drawImage(this.img, at, null);
-
-        Ellipse2D ellipse = new Ellipse2D.Double(this.getPosx()-this.getWidth()/2., this.getPosy()-this.getWidth()/2., this.getWidth(), this.getHeight());
         AffineTransform transform = new AffineTransform();
         transform.translate(this.getPosx(), this.getPosy());
         transform.rotate(angle);
-        this.setBounds(ellipse);
+        Area hitBound=hitRegion;
+        hitBound=hitBound.createTransformedArea(at);
+        this.setBounds(hitBound);
 
     }
 }

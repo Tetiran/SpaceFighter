@@ -16,17 +16,23 @@ public class Laser extends Entity {
     private static int HEIGHT = 8;
     private int spawnCoolDown = 8;
     private boolean userLaser;
+    private Area hitRegion;
+    private AffineTransform at;
+
 
 
     private BufferedImage img;
 
 
-    public Laser(double posx, double posy, int width, int height, int damage, double speed, double angle, boolean userLaser) {
+    Laser(double posx, double posy, int width, int height, int damage, double speed, double angle, boolean userLaser) {
         super(posx, posy, width, height);
         this.damage = damage;
         this.speed = speed;
         this.angle = angle;
         this.userLaser=userLaser;
+        at= new AffineTransform();
+        at.rotate(angle, this.getWidth() / 2.0, this.getHeight() / 2.0);
+
 
         try {
             if (img == null) {
@@ -38,10 +44,11 @@ public class Laser extends Entity {
         }
         this.setWidth(img.getWidth());
         this.setHeight(img.getHeight());
+        hitRegion=ParseMeBaby.areaFromImg(img);
     }
 
 
-    public boolean getOwner() {
+    boolean getOwner() {
         return this.userLaser;
     }
 
@@ -74,23 +81,21 @@ public class Laser extends Entity {
 
     @Override
     public void draw(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g.create();
+        super.draw(g);
 
+        Graphics2D g2d = (Graphics2D) g.create();
         AffineTransform at = new AffineTransform(1f, 0f, 0f, 1f,
                 this.getPosx(), this.getPosy());
-        at.translate(-this.getWidth() / 2.0, -this.getHeight() / 2.0);
         at.rotate(angle, this.getWidth() / 2.0, this.getHeight() / 2.0);
+        at.translate(-this.getWidth() / 2.0, -this.getHeight() / 2.0);
+
 
         g2d.drawImage(this.img, at, null);
 
-        Rectangle2D rect = new Rectangle2D.Double(-WIDTH / 2., -HEIGHT / 2., WIDTH, HEIGHT);
+        Area hitCalculate = hitRegion;
+        hitCalculate = hitCalculate.createTransformedArea(at);
 
-        AffineTransform transform = new AffineTransform();
-        transform.translate(this.getPosx(), this.getPosy());
-        transform.rotate(angle);
-
-        Shape rotatedRect = transform.createTransformedShape(rect);
-        this.setBounds(rotatedRect);
+        this.setBounds(hitCalculate);
 
 
     }

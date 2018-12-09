@@ -1,5 +1,7 @@
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 
 public class PlayerShip extends Ship {
@@ -10,10 +12,11 @@ public class PlayerShip extends Ship {
     private final int WEAPON1COOLDOWN = 20;
     private final int WPNX = 80;
     private final int WPNY = 30;
+    private Area hitRegion;
 
 
-    public PlayerShip(int posx, int posy, int width, int height,
-                      int health, int armor, int shield, int speed) {
+    PlayerShip(int posx, int posy, int width, int height,
+               int health, int armor, int shield, int speed) {
         super(posx, posy, width, height, health, armor, shield, speed, IMG_FILE);
         this.shieldMax=shield;
         this.healthMax=health;
@@ -88,7 +91,7 @@ public class PlayerShip extends Ship {
 
     }
 
-    public void updateCursor(Point p) {
+    void updateCursor(Point p) {
         if (p != null) {
             this.setAngle(Math.atan2(p.y - this.getPosy(), p.x - this.getPosx()));
         } else {
@@ -97,6 +100,8 @@ public class PlayerShip extends Ship {
     }
     @Override
     public void mainAttack() {
+        //super.mainAttack();
+
         if (this.getMainCooldown() == 0) {
 
             double angle = this.getAngle();
@@ -113,11 +118,13 @@ public class PlayerShip extends Ship {
             GameField.addEntity(new Laser(this.getPosx() + newx2,
                     this.getPosy() + newy2, 32, 32, 10, 20, this.getAngle(), true));
         }
+
     }
 
     @Override
     public void draw(Graphics g) {
         super.draw(g);
+
 
     }
 }

@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 
 public class EnemyShip extends Ship {
 
@@ -6,7 +9,7 @@ public class EnemyShip extends Ship {
     private final int WEAPON1COOLDOWN = 50;
     private final int WPNX = 80;
     private final int WPNY = 30;
-    private double accuracy = 0;
+    private double accuracy;
     private int mainWeaponCooldown;
     private double lastTheta = 0;
     private double followDis;
@@ -55,6 +58,21 @@ public class EnemyShip extends Ship {
     @Override
     public void draw(Graphics g) {
         super.draw(g);
+        /*
+        Graphics2D g2d = (Graphics2D) g.create();
+
+
+        Rectangle2D rect = new Rectangle2D.Double(-this.getWidth() / 2., -this.getHeight() / 2., this.getWidth(), this.getHeight());
+
+        AffineTransform transform = new AffineTransform();
+        transform.translate(this.getPosx(), this.getPosy());
+        transform.rotate(this.getAngle());
+
+        Shape rotatedRect = transform.createTransformedShape(rect);
+        Area a = new Area(rotatedRect.getBounds2D());
+        g2d.draw(a);
+        this.setBounds(a);
+*/
 
     }
 }

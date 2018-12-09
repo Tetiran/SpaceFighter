@@ -10,14 +10,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
-public class EventScript {
+class EventScript {
     private static int currLevel = 0;
     private static int currTime = 0;
     private static int prevTime = 0;
     private static Document doc;
     private static int interval=10;
 
-    public static void loadDoc() {
+    static void loadDoc() {
         File inputFile = new File("files/script.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
@@ -28,17 +28,16 @@ public class EventScript {
         }
         doc = null;
         try {
+            assert dBuilder != null;
             doc = dBuilder.parse(inputFile);
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (SAXException | IOException e) {
             e.printStackTrace();
         }
         doc.getDocumentElement().normalize();
     }
 
 
-    public static void readScript() {
+    static void readScript() {
         try {
 
             NodeList LevelList = doc.getElementsByTagName("Level");
@@ -97,12 +96,12 @@ public class EventScript {
         }
     }
 
-    public static void advanceScript() {
+    static void advanceScript() {
         currTime++;
         interval--;
         if(interval<=0){
             readScript();
-            interval=10;
+            interval=100;
         }
 
     }
