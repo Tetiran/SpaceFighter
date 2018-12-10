@@ -2,7 +2,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class Laser extends Entity {
         }
         this.setWidth(img.getWidth());
         this.setHeight(img.getHeight());
-        hitRegion=ParseMeBaby.areaFromImg(img);
+        hitRegion= BoundaryGen.areaFromImg(img);
     }
 
 
@@ -65,6 +64,10 @@ public class Laser extends Entity {
             return 10;
         }
         return 0;
+
+    }
+    public Double getAngle() {
+        return angle;
 
     }
 

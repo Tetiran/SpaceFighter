@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
-import java.util.LinkedList;
 
 public class PlayerShip extends Ship {
     private static final String IMG_FILE = "files/playership.png";
@@ -15,7 +12,7 @@ public class PlayerShip extends Ship {
     private Area hitRegion;
 
 
-    PlayerShip(int posx, int posy, int width, int height,
+    PlayerShip(Double posx, Double posy, int width, int height,
                int health, int armor, int shield, int speed) {
         super(posx, posy, width, height, health, armor, shield, speed, IMG_FILE);
         this.shieldMax=shield;

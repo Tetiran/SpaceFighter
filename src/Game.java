@@ -16,7 +16,7 @@ public class Game implements Runnable {
         EventScript.loadDoc();
         frame.getContentPane().removeAll();
         frame.dispose();
-        //frame.setUndecorated(true);
+        frame.setUndecorated(true);
         // Main playing area
 
         frame.add(field, BorderLayout.CENTER);
@@ -63,6 +63,8 @@ public class Game implements Runnable {
         JButton newGame = new JButton("New Game");
         newGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                GameField.newPlayer();
                 startGame();
             }
         });
@@ -70,15 +72,23 @@ public class Game implements Runnable {
         final JDialog dialog = new JDialog();
         dialog.setModal(true);
         JTextArea area= new JTextArea(
-                "This is an editable JTextArea. " +
-                        "A text area is a \"plain\" text component, " +
-                        "which means that although it can display text " +
-                        "in any font, all of the text is in the same font.");
+                "Welcome to CIS 120 in space! \n ");
+        area.append("Press newgame to create a newgame and loadgame to load a previous save.\n");
+        area.append("When in game press escape to pause and quit the game or save the game.\n");
+        area.append("To move press WASD, and to fire your lasers press spacebar. \n");
+        area.append("Your ship points in the direction of your cursor and that is the direction " +
+                "your lasers will fire. \n");
+        area.append("Your ship's shield regenerates over time if you are not hit.\n");
+        area.append("You will die when your health gets to zero. You will win when " +
+                "all the enemies are killed. Your score is on the top right");
 
         area.setEditable(false);
         area.setFont(new Font("Serif", Font.ITALIC, 16));
-        area.setLineWrap(true);
+        area.setLineWrap(false);
+        //Dimension size= new Dimension(200,100);
+        //area.setPreferredSize(size);
         dialog.add(area);
+        dialog.pack();
 
         JButton Directions = new JButton("Directions");
         Directions.addActionListener(new ActionListener() {
@@ -90,6 +100,7 @@ public class Game implements Runnable {
         frame.add(newGame, BorderLayout.NORTH);
         frame.add(loadGame);
         frame.add(Directions, BorderLayout.SOUTH);
+        frame.setLocation(1920/2-frame.getWidth(), 1080/2-frame.getHeight());
 
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

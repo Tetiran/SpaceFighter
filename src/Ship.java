@@ -2,12 +2,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 
 public class Ship extends Entity {
     private int health;
@@ -29,7 +26,7 @@ public class Ship extends Entity {
     private String SHIELDFILE = "files/Shield.png";
     private Area hitRegion;
 
-    Ship(int posx, int posy, int width, int height, int health, int armor, int shield, int speed, String IMG_FILE) {
+    Ship(Double posx, Double posy, int width, int height, int health, int armor, int shield, int speed, String IMG_FILE) {
         super(posx, posy, width, height);
         this.health = health;
         this.armor = armor;
@@ -39,7 +36,7 @@ public class Ship extends Entity {
         this.setWidth(spriteSheeet.getGrid());
         this.setHeight(spriteSheeet.getGrid());
         this.setImg(spriteSheeet.getSprite(1));
-        hitRegion=ParseMeBaby.areaFromImg(img);
+        hitRegion= BoundaryGen.areaFromImg(img);
 
 
         try {

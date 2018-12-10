@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 public class AsteroidChunck extends Entity {
@@ -28,7 +27,7 @@ public class AsteroidChunck extends Entity {
         img = spriteSheeet.getSprite(0);
         this.setWidth(img.getWidth());
         this.setHeight(img.getHeight());
-        hitRegion=ParseMeBaby.areaFromImg(img);
+        hitRegion= BoundaryGen.areaFromImg(img);
     }
     @Override
     public void update() {

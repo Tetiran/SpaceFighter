@@ -1,7 +1,4 @@
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 
 public class EnemyShip extends Ship {
 
@@ -15,7 +12,7 @@ public class EnemyShip extends Ship {
     private double followDis;
 
 
-    public EnemyShip(int posx, int posy, int width, int height, int health, int armor, int shield, int speed) {
+    public EnemyShip(Double posx, Double posy, int width, int height, int health, int armor, int shield, int speed) {
         super(posx, posy, width, height, health, armor, shield, speed, IMG_FILE);
         accuracy = (Math.random() * (1.0 / Game.difficulty) * .2 + .05);
         followDis = Math.random() * 400 + 300;

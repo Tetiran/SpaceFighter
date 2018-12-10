@@ -94,12 +94,12 @@ public abstract class Entity {
     public abstract void update();
 
     public  void  draw(Graphics g){
-
+/*
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setColor(Color.ORANGE);
         if(bounds!=null) {
             g2d.draw(bounds);
         }
-
+*/
     }
 }

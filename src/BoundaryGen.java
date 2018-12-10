@@ -4,7 +4,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
-class ParseMeBaby {
+class BoundaryGen {
     static Area areaFromImg(BufferedImage img){
         Area temp=new Area();
         int[][] holder = new int[img.getWidth()][img.getHeight()];

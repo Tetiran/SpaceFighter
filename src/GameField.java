@@ -1,10 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,27 +18,25 @@ public class GameField extends JPanel {
     private static LinkedList<Entity> entitiestoadd = new LinkedList<>();
     private static BufferedImage img;
     private static PlayerShip player;
-    private static EnemyShip test;
     private static boolean bossPresent;
     private static double bossHealth;
     private static double BossMax;
     private static String Bossname;
     private Timer timer;
-    private int score = 0;
+    private static int score = 0;
     private Set<Character> pressed = new TreeSet<>();
-    private LinkedList<Entity> entities = new LinkedList<>();
+    private static LinkedList<Entity> entities = new LinkedList<>();
     private StatusBar status;
     private double asteroidSpawn = 0;
     private double LARGEPROABAILITY = .3;
-
+    private boolean endgame;
+    private int endgameCount = 5;
 
 
     GameField() {
-        test = new EnemyShip(500,500,32,32,50,1,0,1);
 
-        player = new PlayerShip(500, 500, 32, 32, 500, 1, 200, 7);
-        entities.add(player);
-        entities.add(test);
+
+
 
         this.setFocusable(true);
 
@@ -66,13 +61,46 @@ public class GameField extends JPanel {
         BossMax = healthmax;
         Bossname = name;
 
-
     }
 
     static void addEntity(Entity entity) {
         if (entity != null) {
             entitiestoadd.add(entity);
         }
+    }
+
+    static void setGameTime(int time) {
+        EventScript.setTime(time);
+
+    }
+    static int getGameTime() {
+        return EventScript.getTime();
+
+    }
+
+    static void setScore(int loadScore) {
+        score=loadScore;
+
+    }
+
+    static int getScore() {
+        return score;
+
+    }
+    static void newPlayer() {
+        player = new PlayerShip(500.0, 500.0, 32, 32, 500, 1, 200, 7);
+        entities.add(player);
+
+    }
+
+    static void setPlayer(PlayerShip playerz) {
+        player=playerz;
+        entities.add(player);
+
+    }
+
+    static LinkedList<Entity> getEntites() {
+        return entities;
 
     }
 
@@ -117,7 +145,7 @@ public class GameField extends JPanel {
             Game.endGame();
 
         }
-        EventScript.advanceScript();
+        endgame = EventScript.advanceScript();
 
 
         if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == null) {
@@ -139,9 +167,46 @@ public class GameField extends JPanel {
         if (pressed.contains(' ')) {
             player.mainAttack();
         }
+        if (pressed.contains('\u001B')) {
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+            timer.stop();
+            pressed.remove('\u001B');
+            final JFrame frame = new JFrame("Game Paused");
+            final JPanel options = new JPanel();
+            FlowLayout flow = new FlowLayout();
+            options.setLayout(flow);
+            JButton saveGame = new JButton("Save Game");
+            saveGame.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    FileMannager.saveSave();
+                }
+            });
+            JButton quit = new JButton("Quit Game");
+            quit.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Game.endGame();
+                }
+            });
+            options.add(saveGame);
+            options.add(quit);
+            frame.add(options);
+            frame.pack();
+            frame.setLocation(1920/2-frame.getWidth(), 1080/2-frame.getHeight());
+            frame.setResizable(false);
+            frame.setVisible(true);
+            frame.addWindowListener(new WindowAdapter()
+            {
+                public void windowClosing(WindowEvent e)
+                {
+                    timer.start();
+                }
+            });
+        }
 
         entities.addAll(entitiestoadd);
         entitiestoadd.clear();
+
 
         Iterator<Entity> iter = entities.iterator();
         numEnemies = 0;
@@ -151,30 +216,32 @@ public class GameField extends JPanel {
             if (ent instanceof EnemyShip) {
                 numEnemies++;
             }
+
+
             for (Entity entity : entities) {
 
-                    if (!(ent instanceof Laser) || !(entity instanceof Laser)) {
-                        if (ent != entity) {
-                            //this increases speed by 100x
-                            if((Math.abs(ent.getPosx()-entity.getPosx())<200)&&
-                                    (Math.abs(ent.getPosy()-entity.getPosy())<200)) {
-                                if (ent.checkCollision(entity)) {
-                                    ent.damage(entity.getDamage());
-                                    entity.damage(ent.getDamage());
-                                    if (ent instanceof Laser) {
-                                        if (((Laser) ent).getOwner()) {
-                                            score += ent.getDamage();
-                                            StatusBar.setScore(score);
-                                        }
-                                    } else if (entity instanceof Laser) {
-                                        if (((Laser) entity).getOwner()) {
-                                            score += entity.getDamage();
-                                            StatusBar.setScore(score);
-                                        }
+                if (!(ent instanceof Laser) || !(entity instanceof Laser)) {
+                    if (ent != entity) {
+                        //this increases speed by 100x
+                        if ((Math.abs(ent.getPosx() - entity.getPosx()) < 200) &&
+                                (Math.abs(ent.getPosy() - entity.getPosy()) < 200)) {
+                            if (ent.checkCollision(entity)) {
+                                ent.damage(entity.getDamage());
+                                entity.damage(ent.getDamage());
+                                if (ent instanceof Laser) {
+                                    if (((Laser) ent).getOwner()) {
+                                        score += ent.getDamage();
+                                        StatusBar.setScore(score);
                                     }
-
+                                } else if (entity instanceof Laser) {
+                                    if (((Laser) entity).getOwner()) {
+                                        score += entity.getDamage();
+                                        StatusBar.setScore(score);
+                                    }
                                 }
+
                             }
+                        }
                     }
                 }
             }
@@ -184,6 +251,16 @@ public class GameField extends JPanel {
                 iter.remove();
             } else if (ent.getPosy() > 2000 || ent.getPosy() < -1000) {
                 iter.remove();
+            }
+        }
+        if (endgame && (numEnemies == 0)) {
+            endgameCount--;
+            if (endgameCount == 0) {
+                timer.stop();
+                final JFrame frame = new JFrame("");
+                JOptionPane.showMessageDialog(frame, "you won the game. What a god");
+                FileMannager.deleteSave();
+                Game.endGame();
             }
         }
 

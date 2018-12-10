@@ -16,6 +16,7 @@ class EventScript {
     private static int prevTime = 0;
     private static Document doc;
     private static int interval=10;
+    private static boolean complete=false;
 
     static void loadDoc() {
         File inputFile = new File("files/script.xml");
@@ -75,34 +76,46 @@ class EventScript {
                             if (Entity.equals("EnemyShip")) {
                                 double spawnpos = Math.random();
                                 if (spawnpos < .33) {
-                                    GameField.addEntity(new EnemyShip(-200, -300,
+                                    GameField.addEntity(new EnemyShip(-200.0, -300.0,
                                             32, 32, health, armor, shield, speed));
                                 } else if (spawnpos > .33 && spawnpos < .66) {
-                                    GameField.addEntity(new EnemyShip(1920/2, -300,
+                                    GameField.addEntity(new EnemyShip(1920/2.0, -300.0,
                                             32, 32, health, armor, shield, speed));
                                 } else {
-                                    GameField.addEntity(new EnemyShip(2000, -300,
+                                    GameField.addEntity(new EnemyShip(2000.0, -300.0,
                                             32, 32, health, armor, shield, speed));
 
                                 }
+                            }
+                            if(EnentI==EventList.getLength()-1) {
+                                complete = true;
                             }
                         }
 
                     }
                 }
+
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    static void advanceScript() {
+    static boolean advanceScript() {
         currTime++;
         interval--;
         if(interval<=0){
             readScript();
             interval=100;
         }
+        return complete;
 
+    }
+    static void setTime(int time) {
+        currTime = time;
+    }
+    static int getTime() {
+        return currTime;
     }
 }
