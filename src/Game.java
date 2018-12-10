@@ -73,6 +73,8 @@ public class Game implements Runnable {
         dialog.setModal(true);
         JTextArea area= new JTextArea(
                 "Welcome to CIS 120 in space! \n ");
+        area.append("You are a small crew manning a Imperial spaceship sent to fight the " +
+                "oncoming invasion.\n");
         area.append("Press newgame to create a newgame and loadgame to load a previous save.\n");
         area.append("When in game press escape to pause and quit the game or save the game.\n");
         area.append("To move press WASD, and to fire your lasers press spacebar. \n");

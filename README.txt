@@ -12,6 +12,11 @@ PennKey: jduhamel
   submitting your proposal.
 
   1. Collections
+  All entities in the game are members of a linked list. This allows fast iteration through the
+  collection of entities and removal without causing any problems with broken state. This also
+  allows the entire game state to be updated by iterating through the collection and calling
+  .update() on every entity. A implementation other than a collection would necessitate resizing and
+  more difficult traversal of all entities.
 
 
   2. Advanced Topic: complex collisions
@@ -20,13 +25,22 @@ PennKey: jduhamel
   irregular collision boundaries. Collisions are calculated by checking if
   there is a non-zero intersection between the area's of two entities that are within 150 pixels of
   each other. If so the result of the damage function of the opposing entity is called on each
-  entity. For images of what this looks like. The orange boundary int the collision boundary
+  entity. For images of what this looks like. The orange boundary is the collision boundary. They
+  are rendered one frame behind the sprite.
   https://drive.google.com/open?id=1tkR-rbfhcEotTnRoef1cPJ6l95C-F7_E
 
 
-  3.
+  3. Inheritance/Subtyping
+  Since there are many types of entities and sub entities in the game having everything extend a
+  common class entity and extend lower classes with more specific function like Ship allows easier
+  modeling of the game and greatly reduces the amount of code and redundancy. common methods such as
+  update and move are used and occasionally overridden in  dynamic dispatch throughout the game.
 
-  4.
+  4. FileIO
+  The game model state is saved by pressing the save button. This records current gametime, score
+  and all the entities currently in the gamefield. pressing LoadGame on the main menu restores the
+  current game time and score and reloads all the entities back into the game. These features use
+  Buffered readers and writers to manage the gamesave file.
 
 
 =========================
